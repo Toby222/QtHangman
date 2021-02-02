@@ -12,7 +12,7 @@ QString HangMan::generateRandomWord()
 }
 
 HangMan::HangMan(QWidget *parent)
-    : QMainWindow(parent, {Qt::MSWindowsFixedSizeDialogHint}), scene(new QGraphicsScene(this)), state(GameState::Ended), gallows(new Gallows)
+    : QMainWindow(parent, {Qt::MSWindowsFixedSizeDialogHint}), state(GameState::Ended), scene(new QGraphicsScene(this)), gallows(new Gallows)
 {
     setWindowTitle("Hangman");
 
@@ -23,10 +23,13 @@ HangMan::HangMan(QWidget *parent)
 
     scene->addItem(gallows);
     wordOutput = scene->addText("", monoFont);
-    wordOutput->setPos(200, 15);
+    wordOutput->setPos(200, 45);
 
     guessedOutput = scene->addText("", monoFont);
     guessedOutput->setPos(200, 150);
+
+    scoreOutput = scene->addText("Score: 0", monoFont);
+    scoreOutput->setPos(200, 10);
 
     endingOutput = scene->addText("", monoFontBold);
     endingOutput->setPos(gallows->x()+23, gallows->y()+50);
@@ -63,6 +66,8 @@ void HangMan::endGame(bool won)
     state = GameState::Ended;
 
     wordOutput->setPlainText(uncensoredWord());
+
+    if(won) scoreOutput->setPlainText(QString("Score: %1").arg(score += currentWord.length()));
 
     /*
      *      You won!
@@ -127,6 +132,8 @@ void HangMan::keyPressEvent(QKeyEvent *event)
     guessedOutput->setPlainText(guessedChars());
 
     if(!currentWord.contains(pressed)) {
+        score--;
+        scoreOutput->setPlainText(QString("Score: %1").arg(score));
         if(gallows->increasePartCount() >= Gallows::PART_COUNT) {
             endGame();
         }

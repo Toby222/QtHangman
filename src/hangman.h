@@ -23,15 +23,17 @@ public:
     void endGame(bool won = false);
 
 private:
-    QGraphicsScene *scene;
     QVector<char> attemptedLetters = {};
     QString currentWord;
     GameState state;
+    int score;
 
+    QGraphicsScene *scene;
     Gallows *gallows;
     QGraphicsTextItem *wordOutput;
     QGraphicsTextItem *guessedOutput;
     QGraphicsTextItem *endingOutput;
+    QGraphicsTextItem *scoreOutput;
 
     static QString generateRandomWord();
 

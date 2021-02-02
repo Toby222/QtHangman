@@ -8,7 +8,7 @@
 
 QString HangMan::generateRandomWord()
 {
-    return QString::fromUtf8(wordList[rand() % sizeof(wordList)/sizeof(std::string)].c_str());
+    return QString::fromUtf8(wordList[QRandomGenerator::global()->bounded(0, sizeof(wordList)/sizeof(std::string))].c_str());
 }
 
 HangMan::HangMan(QWidget *parent)

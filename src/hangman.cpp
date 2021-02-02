@@ -12,7 +12,12 @@ QString HangMan::generateRandomWord()
 }
 
 HangMan::HangMan(QWidget *parent)
-    : QMainWindow(parent, {Qt::MSWindowsFixedSizeDialogHint}), state(GameState::Ended), scene(new QGraphicsScene(this)), gallows(new Gallows)
+    : QMainWindow(parent, {Qt::MSWindowsFixedSizeDialogHint}),
+      state(GameState::Ended),
+      scene(new QGraphicsScene(this)),
+      gallows(new Gallows),
+      resetButton(new QPushButton("New word")),
+      solveButton(new QPushButton("Reveal"))
 {
     setWindowTitle("Hangman");
 
@@ -21,7 +26,10 @@ HangMan::HangMan(QWidget *parent)
     auto monoFontBold = QFont(monoFont);
     monoFontBold.setBold(true);
 
+    scene->setSceneRect(0, 0, 408, 190);
+
     scene->addItem(gallows);
+
     wordOutput = scene->addText("", monoFont);
     wordOutput->setPos(200, 45);
 
@@ -34,9 +42,17 @@ HangMan::HangMan(QWidget *parent)
     endingOutput = scene->addText("", monoFontBold);
     endingOutput->setPos(gallows->x()+23, gallows->y()+50);
 
-    endingOutput->setDefaultTextColor(Qt::red);
+    scene->addWidget(resetButton);
+    resetButton->setFont(monoFont);
+    resetButton->move(200, 100);
+    connect(resetButton, &QPushButton::clicked, this, &HangMan::initGame);
 
-    scene->setSceneRect(0, 0, 408, 190);
+    scene->addWidget(solveButton);
+    solveButton->setFont(monoFont);
+    solveButton->move(300, 100);
+    connect(solveButton, &QPushButton::clicked, this, &HangMan::endGame);
+
+    endingOutput->setDefaultTextColor(Qt::red);
 
     QGraphicsView *view = new QGraphicsView;
     view->setScene(scene);

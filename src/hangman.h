@@ -1,6 +1,7 @@
 #ifndef HANGMAN_H
 #define HANGMAN_H
 #include <QMainWindow>
+#include <QPushButton>
 #include "gallows.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +20,7 @@ class HangMan : public QMainWindow
 public:
     HangMan(QWidget *parent = nullptr);
 
+public slots:
     void initGame();
     void endGame(bool won = false);
 
@@ -28,12 +30,18 @@ private:
     GameState state;
     int score;
 
+    //
     QGraphicsScene *scene;
     Gallows *gallows;
+
     QGraphicsTextItem *wordOutput;
     QGraphicsTextItem *guessedOutput;
     QGraphicsTextItem *endingOutput;
     QGraphicsTextItem *scoreOutput;
+
+    QPushButton *resetButton;
+    QPushButton *solveButton;
+    //
 
     static QString generateRandomWord();
 
